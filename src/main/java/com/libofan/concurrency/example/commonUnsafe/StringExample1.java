@@ -1,23 +1,18 @@
-package com.libofan.concurrency.example;
-
-import com.libofan.concurrency.annoations.NotThreadSafe;
-import lombok.extern.slf4j.Slf4j;
+package com.libofan.concurrency.example.commonUnsafe;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicInteger;
 
-@Slf4j
-public class CountExample2 {
+public class StringExample1 {
     // 请求总数
     public static int clientTotal = 5000;
 
     // 同时并发线程数
     public static int threadTotal = 200;
 
-    public static AtomicInteger count = new AtomicInteger(0);
+    public static StringBuffer count = new StringBuffer();
 
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -27,7 +22,7 @@ public class CountExample2 {
             executorService.execute(() -> {
                 try {
                     semaphore.acquire();
-                    add();
+                    update();
                     semaphore.release();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -41,10 +36,10 @@ public class CountExample2 {
             e.printStackTrace();
         }
         executorService.shutdown();
-        System.out.printf("count: %d", count.get());
+        System.out.printf("count: %d", count.length());
     }
 
-    private static void add() {
-        count.incrementAndGet();
+    private static void update() {
+        count.append("i");
     }
 }
