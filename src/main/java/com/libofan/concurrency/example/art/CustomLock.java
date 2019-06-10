@@ -44,7 +44,7 @@ public class CustomLock extends AbstractQueuedSynchronizer {
 
     // 共享模式：公平锁，会循环阻塞
     protected final int tryAcquireShared(int acquires) {
-        for (;;)  {
+        for (; ; ) {
             if (hasQueuedPredecessors()) {
                 return -1;
             }
@@ -69,7 +69,5 @@ public class CustomLock extends AbstractQueuedSynchronizer {
             }
         }
     }
-
-
 
 }
