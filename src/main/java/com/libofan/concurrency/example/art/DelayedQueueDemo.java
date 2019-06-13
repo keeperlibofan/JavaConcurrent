@@ -23,7 +23,7 @@ public class DelayedQueueDemo {
         }
 
         public V get(K value) {
-
+            return null;
         }
 
         public Cache() {
