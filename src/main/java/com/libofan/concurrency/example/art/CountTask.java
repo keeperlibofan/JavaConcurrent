@@ -1,8 +1,9 @@
 package com.libofan.concurrency.example.art;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.RecursiveTask;
+import org.assertj.core.data.MapEntry;
+
+import java.util.Map;
+import java.util.concurrent.*;
 
 public class CountTask extends RecursiveTask<Integer> {
     private int start;
@@ -27,7 +28,8 @@ public class CountTask extends RecursiveTask<Integer> {
             int mid = (start + end) / 2;
             CountTask leftCountTask = new CountTask(start, mid);
             CountTask rightCountTask = new CountTask(mid+1, end);
-            int leftResult = leftCountTask.fork().join(); // 不用compute的原因就是提供一个异步的计算方案, fork如何实现
+            // fork如何实现, 调用fork发生了什么?
+            int leftResult = leftCountTask.fork().join();
             int rightResult = rightCountTask.fork().join();
             sum += leftResult;
             sum += rightResult;
@@ -37,11 +39,17 @@ public class CountTask extends RecursiveTask<Integer> {
 
     public static void main(String[] args) {
         ForkJoinPool forkJoinPool = new ForkJoinPool();
+        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap();
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+
+        }
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(4);
+        cyclicBarrier.reset();
+        Exchanger<Integer> exchanger = new Exchanger<>();
         CountTask countTask = new CountTask(1, 4);
         try {
             System.out.println(forkJoinPool.submit(countTask).get());
         } catch (ExecutionException | InterruptedException e) {
-
         }
     }
 }
